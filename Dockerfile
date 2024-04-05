@@ -21,3 +21,5 @@ RUN go build -v -o app main.go
 
 # run the executable
 CMD [ "sh", "-c", "./app -p $APP_PORT" ]
+
+EXPOSE $APP_PORT
