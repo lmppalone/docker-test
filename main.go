@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func main() {
@@ -21,6 +22,17 @@ func main() {
 	h.HandleFunc("GET /ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, err := w.Write([]byte("pong"))
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("server internal error"))
+		}
+	})
+
+	h.HandleFunc("GET /hello/{name}", func(w http.ResponseWriter, r *http.Request) {
+		n := strings.Split(r.URL.String(), "/")[2]
+
+		w.WriteHeader(http.StatusOK)
+		_, err := w.Write([]byte(fmt.Sprintf("hello %s", n)))
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("server internal error"))
